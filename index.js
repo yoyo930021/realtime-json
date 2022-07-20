@@ -1,18 +1,22 @@
 import { Server } from "socket.io"
 import fetch from 'node-fetch'
 import { diff } from 'deep-object-diff'
+import { config } from 'dotenv'
+
+config({ path: './.env' })
 
 const io = new Server({ /* options */ })
 
 let original = null
 
 async function fetchData () {
-  const res = await fetch('https://script.google.com/macros/s/AKfycby0TNkshgnuV6rwQrD0Hx5GFkvx1dWTgBCgLIUh_VO4srIpYVhcE1VFBqBa69ka97A/exec')
+  const res = await fetch(process.env.JSON_SOURCE)
   const data = await res.json()
   return data
 }
 
 (async () => {
+  if (!process.env.JSON_SOURCE || !process.env.SOURCE_FREQ) throw new Error('no env.')
   original = await fetchData()
 
   io.on("connection", (socket) => {
@@ -30,5 +34,5 @@ async function fetchData () {
 
     if (JSON.stringify(diffData) !== '{}') io.emit('update', diffData)
     original = data
-  }, 3000)
+  }, process.env.SOURCE_FREQ)
 })()
