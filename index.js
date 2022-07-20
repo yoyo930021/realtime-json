@@ -4,7 +4,7 @@ import { diff } from 'deep-object-diff'
 
 const io = new Server({ /* options */ })
 
-const original = null
+let original = null
 
 async function fetchData () {
   const res = await fetch('https://script.google.com/macros/s/AKfycby0TNkshgnuV6rwQrD0Hx5GFkvx1dWTgBCgLIUh_VO4srIpYVhcE1VFBqBa69ka97A/exec')
@@ -24,7 +24,7 @@ async function fetchData () {
   })
   io.listen(3000)
 
-  setInterval(() => {
+  setInterval(async () => {
     const data = await fetchData()
     const diffData = diff(original, data)
 
