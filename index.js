@@ -20,7 +20,7 @@ async function fetchData () {
   original = await fetchData()
 
   io.on("connection", (socket) => {
-    console.log(`${socket.id} ${socket.handshake.address} connection`)
+    console.log(`${socket.id} ${socket.handshake.headers['x-forwarded-for'] || socket.handshake.headers.forwarded} connection`)
     socket.emit('data', original)
   })
   io.on('data', (socket) => {
