@@ -28,7 +28,7 @@ async function fetchData () {
     const data = await fetchData()
     const diffData = diff(original, data)
 
-    io.emit('update', diffData)
+    if (JSON.stringify(diffData) !== '{}') io.emit('update', diffData)
     original = data
   }, 3000)
 })()
