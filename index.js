@@ -34,5 +34,5 @@ async function fetchData () {
 
     if (JSON.stringify(diffData) !== '{}') io.emit('update', diffData)
     original = data
-  }, process.env.SOURCE_FREQ)
+  }, Number(process.env.SOURCE_FREQ))
 })()
